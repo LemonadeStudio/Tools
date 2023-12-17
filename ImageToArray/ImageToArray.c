@@ -10,7 +10,7 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	stbi_set_flip_vertically_on_load(argv[3][0]);
+	stbi_set_flip_vertically_on_load(argv[3][0] - '0');
 	
 	int width, height, channel;
 	unsigned char * data = stbi_load(argv[1], & width, & height, & channel, 0);
