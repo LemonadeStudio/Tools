@@ -2,4 +2,4 @@
 *.un~
 *.*~
 
-RemoveAlpha/*.png
+SeparateAlpha/*.png

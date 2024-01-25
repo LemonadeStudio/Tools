@@ -4,13 +4,14 @@
 #include "../_Third/stb/stb_image_write.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char ** argv) {
 
-	if(argc < 2) {
+	if(argc < 4) {
 		printf(
 			"Usage:\n"
-			"./RemoveAlpha <in.png> <out.png>\n"
+			"./RemoveAlpha <in.png> <colorOut.png> <alphaOut.png>\n"
 		);
 		system("pause");
 		return 0;
@@ -27,13 +28,24 @@ int main(int argc, char ** argv) {
 	}
 
 	size_t siz = (size_t)width * height * channel;
-	for(size_t i = channel - 1; i < siz; i += channel) {
-		data[i] = 255;
-	}
-	printf("Process over! Now saving...\n");
+	unsigned char * colorData = (unsigned char *)malloc(siz * sizeof(unsigned char));
 
-	stbi_write_png(argv[2], width, height, channel, data, 0);
-	printf("Save over!\n");
+	for(size_t i = 0; i < siz; i++) {
+		colorData[i] = (i % 4 == 3) ? 255 : data[i];
+	}
+	printf("Process color over! Now saving...\n");
+
+	stbi_write_png(argv[2], width, height, 4, colorData, 0);
+	printf("Save color over!\n");
+
+	for(size_t i = 0; i < siz; i += 4) {
+		data[i] = data[i + 1] = data[i + 2] = data[i + 3];
+		data[i + 3] = 255;
+	}
+	printf("Process alpha over! Now saving...\n");
+
+	stbi_write_png(argv[3], width, height, 4, data, 0);
+	printf("Save alpha over!\n");
 
 	stbi_image_free(data);
 
