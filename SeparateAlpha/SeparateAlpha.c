@@ -37,6 +37,8 @@ int main(int argc, char ** argv) {
 
 	stbi_write_png(argv[2], width, height, 4, colorData, 0);
 	printf("Save color over!\n");
+	free(colorData);
+	colorData = NULL;
 
 	for(size_t i = 0; i < siz; i += 4) {
 		data[i] = data[i + 1] = data[i + 2] = data[i + 3];
