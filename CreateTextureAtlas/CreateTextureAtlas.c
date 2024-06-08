@@ -189,7 +189,7 @@ void SaveUVData(const char * filename, int textureW, int textureH, SImage ** ima
 		printf("Error! Failed to write into %s!\n", filename);
 		return;
 	}
-	fprintf(f, "\"image name\" : (left top) (right bottom)");
+	fprintf(f, "\"image name\" : (left top) (right bottom)\n");
 	for(int i = 0; i < imageNum; i++) {
 		float texW = (float)textureW, texH = (float)textureH;
 		float left = (float)images[i]->x, top = (float)(textureH - images[i]->y);
