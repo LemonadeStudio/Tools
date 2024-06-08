@@ -189,16 +189,18 @@ void SaveUVData(const char * filename, int textureW, int textureH, SImage ** ima
 		printf("Error! Failed to write into %s!\n", filename);
 		return;
 	}
-	fprintf(f, "\"image name\" : (left top) (right bottom)\n");
+	fprintf(f, "{ // \"image name\" : (left top) (right bottom)\n");
 	for(int i = 0; i < imageNum; i++) {
 		float texW = (float)textureW, texH = (float)textureH;
 		float left = (float)images[i]->x, top = (float)(textureH - images[i]->y);
 		float right = (float)(images[i]->x + images[i]->width), bottom = (float)(textureH - (images[i]->y + images[i]->height));
-		fprintf(f, "\"%s\" : (%f,%f) (%f,%f)\n",
+		fprintf(f, "{ \"%s\", { { %f, %f }, { %f, %f } } }%s",
 			images[i]->filenameWithoutDirectory,
 			left / texW, top / texH,
-			right / texW, bottom / texH
+			right / texW, bottom / texH,
+			(i == imageNum - 1) ? "\n" : ",\n"
 		);
 	}
+	fprintf(f, "}");
 	fclose(f);
 }
