@@ -185,14 +185,19 @@ nextImage: {};
 
 void SaveUVData(const char * filename, int textureW, int textureH, SImage ** images, int imageNum) {
 	FILE * f = fopen(filename, "w");
+	if(!f) {
+		printf("Error! Failed to write into %s!\n", filename);
+		return;
+	}
+	fprintf(f, "\"image name\" : (left top) (right bottom)");
 	for(int i = 0; i < imageNum; i++) {
 		float texW = (float)textureW, texH = (float)textureH;
-		float ltX = (float)images[i]->x, ltY = (float)images[i]->y;
-		float rbX = (float)(images[i]->x + images[i]->width), rbY = (float)(images[i]->y + images[i]->height);
+		float left = (float)images[i]->x, top = (float)(textureH - images[i]->y);
+		float right = (float)(images[i]->x + images[i]->width), bottom = (float)(textureH - (images[i]->y + images[i]->height));
 		fprintf(f, "\"%s\" : (%f,%f) (%f,%f)\n",
 			images[i]->filenameWithoutDirectory,
-			ltX / texW, ltY / texH,
-			rbX / texW, rbY / texH
+			left / texW, top / texH,
+			right / texW, bottom / texH
 		);
 	}
 	fclose(f);
