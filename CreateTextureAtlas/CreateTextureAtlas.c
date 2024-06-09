@@ -194,7 +194,7 @@ void SaveUVData(const char * filename, int textureW, int textureH, SImage ** ima
 		float texW = (float)textureW, texH = (float)textureH;
 		float left = (float)images[i]->x, top = (float)(textureH - images[i]->y);
 		float right = (float)(images[i]->x + images[i]->width), bottom = (float)(textureH - (images[i]->y + images[i]->height));
-		fprintf(f, "{ \"%s\", { { %f, %f }, { %f, %f } } }%s",
+		fprintf(f, "{ \"%s\", { { %ff, %ff }, { %ff, %ff } } }%s",
 			images[i]->filenameWithoutDirectory,
 			left / texW, top / texH,
 			right / texW, bottom / texH,
