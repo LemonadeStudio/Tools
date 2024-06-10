@@ -26,6 +26,7 @@ SImage * ImageLoad(const char * filename) {
 	}
 	if(channel != 4) {
 		printf("Error! There are %d channels in %s!\n", channel, filename);
+		stbi_image_free(pImage->data);
 		free(pImage);
 		return NULL;
 	}
@@ -39,7 +40,7 @@ SImage * ImageLoad(const char * filename) {
 			break;
 		}
 	}
-	len -= i;
+	len = len - i + 1;
 
 	pImage->filenameWithoutDirectory = (char *)malloc(sizeof(char) * len);
 	strcpy(pImage->filenameWithoutDirectory, filename + i);
@@ -93,7 +94,7 @@ int main(int argc, char ** argv) {
 			images[imageNum++] = pImage;
 		}
 	}
-	qsort(images, argc - 1, sizeof(* images), ImageCompare);
+	qsort(images, imageNum, sizeof(* images), ImageCompare);
 
 	unsigned char * outImage = (unsigned char *)malloc(sizeof(unsigned char) * height * width * 4);
 	for(int i = height * width * 4 - 1; i >= 0; i--) {
