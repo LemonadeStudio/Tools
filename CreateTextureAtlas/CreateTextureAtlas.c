@@ -75,11 +75,13 @@ int main(int argc, char ** argv) {
 	printf("Number of input images: %d\n", argc - 1);
 
 	char name[1024];
-	int width, height, alignment;
+	int width, height, alignment, spacing;
 	printf("Input output image width & height(example: 2048 2048): ");
 	scanf_s("%d%d", & width, & height);
-	printf("Input alignment(example: 16): ");
+	printf("Input alignment(example: 1): ");
 	scanf_s("%d", & alignment);
+	printf("Input spacing between images(example: 16): ");
+	scanf_s("%d", & spacing);
 	printf("Input output filename(without suffix): ");
 	scanf_s("%s", name);
 
@@ -119,15 +121,15 @@ int main(int argc, char ** argv) {
 					break;
 				}
 				int canDrawHere = 1;
-				for(int xx = 0; xx < pImage->width; xx++) {
-					for(int yy = 0; yy < pImage->height; yy++) {
-						if(y + yy >= height || x + xx >= width) {
+				for(int xx = -spacing; xx < pImage->width + spacing; xx++) {
+					for(int yy = -spacing; yy < pImage->height + spacing; yy++) {
+						if(y + yy < 0 || x + xx < 0 || y + yy >= height || x + xx >= width) {
 							canDrawHere = 0;
 							break;
 						}
 						if(marks[y + yy][x + xx]) {
 							y = marks[y + yy][x + xx];
-							xx = yy = 0;
+							xx = yy = -spacing;
 						}
 					}
 					if(!canDrawHere) {
@@ -139,7 +141,7 @@ int main(int argc, char ** argv) {
 				}
 				for(int xx = 0; xx < pImage->width; xx++) {
 					for(int yy = 0; yy < pImage->height; yy++) {
-						marks[y + yy][x + xx] = y + pImage->height;
+						marks[y + yy][x + xx] = y + pImage->height + spacing;
 						for(int channelIndex = 0; channelIndex < 4; channelIndex++) {
 							outImage[(y + yy) * width * 4 + (x + xx) * 4 + channelIndex] = pImage->data[yy * pImage->width * 4 + xx * 4 + channelIndex];
 						}
